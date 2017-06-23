@@ -1,11 +1,13 @@
-
 # TODO:
-# - x86/x64
 # - option to install pre-compiled binaries?
-#   try to download pre-compiled libs first, if it fails fall-back to source
+#  try to download pre-compiled libs first, if it fails fall-back to source
+
+# NOTE:
+# - x86/x64 - vcpkg default one is x86, to build nvml use nvml:x64-windows or set environment variable VCPKG_DEFAULT_TRIPLET to 'x64-windows'
 
 set(NVML_VERSION 1.2.2)
 set(NVML_HASH 1cca38e579307308ac9be1e1e648893707f19b62f0d5d9377db38a8a4a1f16352c8d731fa76d4ba31b57a0bbace02ba6127b9bf2d03fe0f92a45f1f4c8b24ed6)
+set(SOURCE_PATH ${CURRENT_BUILDTREES_DIR}/src/${NVML_VERSION})
 
 include(vcpkg_common_functions)
 
@@ -13,13 +15,13 @@ include(vcpkg_common_functions)
 #    message(FATAL_ERROR "Static building not supported.")
 #endif()
  
-#if (TRIPLET_SYSTEM_ARCH MATCHES "arm")
-#    message(FATAL_ERROR "ARM is currently not supported.")
-#elseif (TRIPLET_SYSTEM_ARCH MATCHES "x86")
-#    message(FATAL_ERROR "x86 is currently not supported.")
-#else ()
-#    set(MSBUILD_PLATFORM ${TRIPLET_SYSTEM_ARCH})
-#endif()
+if (TRIPLET_SYSTEM_ARCH MATCHES "arm")
+    message(FATAL_ERROR "ARM is not supported in NVML - please use nvml:x64-windows or set environment variable VCPKG_DEFAULT_TRIPLET to 'x64-windows'")
+elseif (TRIPLET_SYSTEM_ARCH MATCHES "x86")
+    message(FATAL_ERROR "x86 is not supported in NVML - please use nvml:x64-windows or set environment variable VCPKG_DEFAULT_TRIPLET to 'x64-windows'")
+else ()
+    set(MSBUILD_PLATFORM ${TRIPLET_SYSTEM_ARCH})
+endif()
 
 # Download source
 vcpkg_from_github(
